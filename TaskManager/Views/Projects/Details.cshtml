@@ -1,0 +1,202 @@
+﻿@model TaskManager.ViewModels.ProjectViewModels.ProjectDetailsViewModel
+
+@{
+    ViewData["Title"] = "Project Details";
+
+    int progress = Model.TasksCount == 0
+        ? 0
+        : (int)Math.Round(
+            (double)Model.CompletedTasksCount /
+            Model.TasksCount * 100);
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h2 class="mb-1">@Model.Name</h2>
+
+            <p class="text-muted mb-0">
+                Project overview and progress
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-controller="Projects"
+               asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-primary">
+                Edit
+            </a>
+
+            <a asp-controller="Projects"
+               asp-action="Delete"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-danger">
+                Delete
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <h5 class="card-title mb-3">
+                        Project Information
+                    </h5>
+
+                    <p>
+                        <strong>Description:</strong>
+                    </p>
+
+                    <p class="text-muted">
+                        @(string.IsNullOrWhiteSpace(Model.Description)
+                                                ? "No description provided."
+                                                : Model.Description)
+                    </p>
+
+                    <hr />
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Owner</strong>
+                            <div class="text-muted">
+                                @Model.OwnerName
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Created On</strong>
+                            <div class="text-muted">
+                                @Model.CreatedOn.ToString("dd.MM.yyyy")
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Deadline</strong>
+                            <div class="text-muted">
+                                @if (Model.Deadline.HasValue)
+                                {
+                                    @Model.Deadline.Value.ToString("dd.MM.yyyy")
+                                }
+                                else
+                                {
+                                    <span>No deadline</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <strong>Members</strong>
+                            <div class="text-muted">
+                                @Model.MembersCount
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <h5 class="card-title mb-3">
+                        Progress
+                    </h5>
+
+                    <div class="mb-2 d-flex justify-content-between">
+                        <span>Completed Tasks</span>
+                        <span>
+                            @Model.CompletedTasksCount / @Model.TasksCount
+                        </span>
+                    </div>
+
+                    <div class="progress mb-3">
+                        <div class="progress-bar"
+                             role="progressbar"
+                             style="width: @progress%"
+                             aria-valuenow="@progress"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            @progress%
+                        </div>
+                    </div>
+
+                    <p class="text-muted mb-0">
+                        @progress% of all project tasks are completed.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            Tasks
+                        </h5>
+
+                        <span class="badge bg-secondary">
+                            @Model.TasksCount
+                        </span>
+                    </div>
+
+                    <hr />
+
+                    <p class="text-muted mb-0">
+                        Project tasks will appear here.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            Members
+                        </h5>
+
+                        <span class="badge bg-secondary">
+                            @Model.MembersCount
+                        </span>
+                    </div>
+
+                    <hr />
+
+                    <p class="text-muted mb-0">
+                        Project members will appear here.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Projects"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back to Projects
+        </a>
+    </div>
+
+</div>

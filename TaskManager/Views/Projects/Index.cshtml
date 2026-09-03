@@ -1,0 +1,122 @@
+﻿@model IEnumerable<TaskManager.ViewModels.ProjectViewModels.ProjectIndexViewModel>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">My Projects</h2>
+            <p class="text-muted mb-0">
+                Manage your projects and track their progress.
+            </p>
+        </div>
+
+        <a asp-controller="Projects"
+           asp-action="Create"
+           class="btn btn-primary">
+            Create Project
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You are not participating in any projects yet.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var project in Model)
+            {
+                int progress = project.TasksCount == 0
+                ? 0
+                : (int)Math.Round(
+                (double)project.CompletedTasksCount /
+                project.TasksCount * 100);
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                @project.Name
+                            </h5>
+
+                            <p class="card-text text-muted">
+                                @(string.IsNullOrWhiteSpace(project.Description)
+                                                        ? "No description provided."
+                                                        : project.Description)
+                    </p>
+
+                            <hr />
+
+                            <p class="mb-2">
+                                <strong>Owner:</strong>
+                                @project.OwnerName
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Members:</strong>
+                                @project.MembersCount
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Tasks:</strong>
+                                @project.CompletedTasksCount / @project.TasksCount
+                            </p>
+
+                            <p class="mb-3">
+                                <strong>Deadline:</strong>
+
+                        @if (project.Deadline.HasValue)
+                                {
+                                    @project.Deadline.Value.ToString("dd.MM.yyyy")
+                                }
+                                else
+                                {
+                                    <span>No deadline</span>
+                                }
+                            </p>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span>Progress</span>
+                                <span>@progress%</span>
+                            </div>
+
+                            <div class="progress mb-3">
+                                <div class="progress-bar"
+                                     role="progressbar"
+                                     style="width: @progress%"
+                                     aria-valuenow="@progress"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    @progress%
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-transparent border-0">
+
+                            <a asp-controller="Projects"
+                               asp-action="Details"
+                               asp-route-id="@project.Id"
+                               class="btn btn-outline-primary w-100">
+                                View Project
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
