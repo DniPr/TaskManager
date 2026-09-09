@@ -1,0 +1,144 @@
+﻿@model TaskManager.ViewModels.TaskViewModels.TaskEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Task";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-3">Edit Task</h2>
+
+                    <p class="text-muted">
+                        Update task information and progress.
+                    </p>
+
+                    <form asp-controller="Tasks"
+                          asp-action="Edit"
+                          asp-route-id="@Model.Id"
+                          method="post">
+
+                        <input asp-for="Id" type="hidden" />
+                        <input asp-for="ProjectId" type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description"
+                                   class="form-label">
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="5">
+                            </textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Status"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="Status"
+                                    asp-items="Html.GetEnumSelectList<TaskManager.Models.Enums.TaskItemStatus>()"
+                                    class="form-select">
+                            </select>
+
+                            <span asp-validation-for="Status"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Priority"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="Priority"
+                                    asp-items="Html.GetEnumSelectList<TaskManager.Models.Enums.TaskPriority>()"
+                                    class="form-select">
+                            </select>
+
+                            <span asp-validation-for="Priority"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Deadline"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Deadline"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Deadline"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="AssignedUserId"
+                                   class="form-label">
+                                Assigned User
+                            </label>
+
+                            <input asp-for="AssignedUserId"
+                                   class="form-control"
+                                   placeholder="User ID (optional)" />
+
+                            <span asp-validation-for="AssignedUserId"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-controller="Tasks"
+                               asp-action="Details"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

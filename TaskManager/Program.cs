@@ -26,6 +26,7 @@ namespace TaskManager
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
 
             var app = builder.Build();
 

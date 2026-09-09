@@ -15,40 +15,42 @@ namespace TaskManager.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<TaskIndexViewModel>> GetAllByProjectAsync(int projectId, string userId)
+        public async Task<TaskIndexPageViewModel?> GetAllByProjectAsync(int projectId,string userId)
         {
-            bool hasAccess = await dbContext.Projects
+            TaskIndexPageViewModel? result = await dbContext.Projects
                 .AsNoTracking()
-                .AnyAsync(p =>
+                .Where(p =>
                     p.Id == projectId &&
                     (p.OwnerId == userId ||
-                     p.ProjectMembers.Any(pm => pm.UserId == userId)));
-
-            if (!hasAccess)
-            {
-                return Enumerable.Empty<TaskIndexViewModel>();
-            }
-
-            return await dbContext.TaskItems
-                .AsNoTracking()
-                .Where(t => t.ProjectId == projectId)
-                .Select(t => new TaskIndexViewModel
+                     p.ProjectMembers.Any(pm => pm.UserId == userId)))
+                .Select(p => new TaskIndexPageViewModel
                 {
-                    Id = t.Id,
-                    Title = t.Title,
-                    Status = t.Status,
-                    Priority = t.Priority,
-                    Deadline = t.Deadline,
-                    AssignedUserName = t.AssignedUser == null
-                        ? null
-                        : t.AssignedUser.FirstName + " " + t.AssignedUser.LastName,
-                    ProjectId = t.ProjectId,
-                    ProjectName = t.Project.Name
+                    Tasks = p.Tasks
+                        .Select(t => new TaskIndexViewModel
+                        {
+                            Id = t.Id,
+                            Title = t.Title,
+                            Status = t.Status,
+                            Priority = t.Priority,
+                            Deadline = t.Deadline,
+
+                            AssignedUserName = t.AssignedUser == null
+                                ? null
+                                : t.AssignedUser.FirstName
+                                  + " "
+                                  + t.AssignedUser.LastName,
+
+                            ProjectId = t.ProjectId,
+                            ProjectName = p.Name
+                        })
+                        .OrderBy(t => t.Status)
+                        .ThenByDescending(t => t.Priority)
+                        .ThenBy(t => t.Deadline)
+                        .ToList()
                 })
-                .OrderBy(t => t.Status)
-                .ThenByDescending(t => t.Priority)
-                .ThenBy(t => t.Deadline)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
+
+            return result;
         }
         public async Task<TaskDetailsViewModel?> GetDetailsAsync(int id,string userId)
         {
