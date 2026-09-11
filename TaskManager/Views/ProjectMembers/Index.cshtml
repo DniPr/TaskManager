@@ -1,0 +1,101 @@
+﻿@model TaskManager.ViewModels.ProjectMemberViewModels.ProjectMembersPageViewModel
+
+@{
+    ViewData["Title"] = "Project Members";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">
+                @Model.ProjectName
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage the members of this project.
+            </p>
+        </div>
+
+        <a asp-controller="ProjectMembers"
+           asp-action="Add"
+           asp-route-projectId="@Model.ProjectId"
+           class="btn btn-primary">
+            Add Member
+        </a>
+    </div>
+
+    @if (!Model.Members.Any())
+    {
+        <div class="alert alert-info">
+            There are no members in this project yet.
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+
+            @foreach (var member in Model.Members)
+            {
+                <div class="col-12">
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <h5 class="mb-1">
+                                        @member.FullName
+                                    </h5>
+
+                                    <p class="text-muted mb-1">
+                                        @member.Email
+                                    </p>
+
+                                    <small class="text-muted">
+                                        Joined:
+                                        @member.JoinedOn.ToString("dd.MM.yyyy")
+                                    </small>
+                                </div>
+
+                                <form asp-controller="ProjectMembers"
+                                      asp-action="Remove"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="projectId"
+                                           value="@Model.ProjectId" />
+
+                                    <input type="hidden"
+                                           name="memberUserId"
+                                           value="@member.UserId" />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger">
+                                        Remove
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Projects"
+           asp-action="Details"
+           asp-route-id="@Model.ProjectId"
+           class="btn btn-outline-secondary">
+            Back to Project
+        </a>
+    </div>
+
+</div>

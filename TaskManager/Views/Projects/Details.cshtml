@@ -188,9 +188,16 @@
 
                     <hr />
 
-                    <p class="text-muted mb-0">
-                        Project members will appear here.
+                    <p class="text-muted mb-3">
+                        View and manage the members of this project.
                     </p>
+
+                    <a asp-controller="ProjectMembers"
+                       asp-action="Index"
+                       asp-route-projectId="@Model.Id"
+                       class="btn btn-primary">
+                        Manage Members
+                    </a>
 
                 </div>
             </div>

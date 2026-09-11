@@ -1,0 +1,70 @@
+﻿@model TaskManager.ViewModels.ProjectMemberViewModels.ProjectMemberAddViewModel
+
+@{
+    ViewData["Title"] = "Add Project Member";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-3">Add Project Member</h2>
+
+                    <p class="text-muted">
+                        Add a registered user to this project by email.
+                    </p>
+
+                    <form asp-controller="ProjectMembers"
+                          asp-action="Add"
+                          method="post">
+
+                        <input asp-for="ProjectId" type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   placeholder="Enter user's email" />
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-controller="ProjectMembers"
+                               asp-action="Index"
+                               asp-route-projectId="@Model.ProjectId"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Add Member
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
