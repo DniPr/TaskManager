@@ -1,4 +1,5 @@
 ﻿using TaskManager.Models.Enums;
+using TaskManager.ViewModels.CommentViewModels;
 
 namespace TaskManager.ViewModels.TaskViewModels
 {
@@ -17,5 +18,7 @@ namespace TaskManager.ViewModels.TaskViewModels
         public string? AssignedUserId { get; set; }
         public string? AssignedUserName { get; set; }
         public int CommentsCount { get; set; }
+        public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
+        public CommentCreateViewModel NewComment { get; set; } = new CommentCreateViewModel();
     }
 }

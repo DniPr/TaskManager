@@ -3,6 +3,7 @@ using TaskManager.Data;
 using TaskManager.Models;
 using TaskManager.Models.Enums;
 using TaskManager.Services.Interfaces;
+using TaskManager.ViewModels.CommentViewModels;
 using TaskManager.ViewModels.TaskViewModels;
 
 namespace TaskManager.Services
@@ -78,7 +79,22 @@ namespace TaskManager.Services
                         ? null
                         : t.AssignedUser.FirstName + " " + t.AssignedUser.LastName,
 
-                    CommentsCount = t.Comments.Count()
+                    CommentsCount = t.Comments.Count(),
+                    Comments = t.Comments
+                    .OrderBy(c => c.CreatedOn)
+                    .Select(c => new CommentViewModel
+                    {
+                        Id = c.Id,
+                        Content = c.Content,
+                        CreatedOn = c.CreatedOn,
+                        AuthorId = c.AuthorId,
+                        AuthorName = c.Author.FirstName + " " + c.Author.LastName
+                    })
+                    .ToList(),
+                    NewComment = new CommentCreateViewModel
+                    {
+                        TaskItemId = t.Id
+                    }
                 })
                 .FirstOrDefaultAsync();
         }
