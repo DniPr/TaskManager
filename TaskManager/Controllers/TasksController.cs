@@ -54,27 +54,37 @@ namespace TaskManager.Controllers
 
 
         [HttpGet]
-        public IActionResult Create(int projectId)
+        public async Task<IActionResult> Create(int projectId)
         {
+            string userId = GetUserId();
+
+            IEnumerable<TaskAssigneeViewModel> assignees =
+                await taskService.GetProjectAssigneesAsync(projectId, userId);
+
             TaskCreateViewModel vmodel = new TaskCreateViewModel
             {
-                ProjectId = projectId
+                ProjectId = projectId,
+                Assignees = assignees
             };
 
             return View(vmodel);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TaskCreateViewModel vmodel)
         {
+            string userId = GetUserId();
+
             if (!ModelState.IsValid)
             {
+                vmodel.Assignees =
+                    await taskService.GetProjectAssigneesAsync(
+                        vmodel.ProjectId,
+                        userId);
+
                 return View(vmodel);
             }
-
-            string userId = GetUserId();
 
             try
             {
@@ -90,6 +100,11 @@ namespace TaskManager.Controllers
                     nameof(vmodel.AssignedUserId),
                     "The selected user is not a member of this project.");
 
+                vmodel.Assignees =
+                    await taskService.GetProjectAssigneesAsync(
+                        vmodel.ProjectId,
+                        userId);
+
                 return View(vmodel);
             }
 
@@ -98,23 +113,26 @@ namespace TaskManager.Controllers
                 new { projectId = vmodel.ProjectId });
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             string userId = GetUserId();
 
-            TaskEditViewModel? task =
+            TaskEditViewModel? vmodel =
                 await taskService.GetForEditAsync(id, userId);
 
-            if (task == null)
+            if (vmodel == null)
             {
                 return NotFound();
             }
 
-            return View(task);
-        }
+            vmodel.Assignees =
+                await taskService.GetProjectAssigneesAsync(
+                    vmodel.ProjectId,
+                    userId);
 
+            return View(vmodel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -125,15 +143,23 @@ namespace TaskManager.Controllers
                 return BadRequest();
             }
 
+            string userId = GetUserId();
+
             if (!ModelState.IsValid)
             {
+                vmodel.Assignees =
+                    await taskService.GetProjectAssigneesAsync(
+                        vmodel.ProjectId,
+                        userId);
+
                 return View(vmodel);
             }
 
-            string userId = GetUserId();
-
             bool isEdited =
-                await taskService.EditAsync(id, vmodel, userId);
+                await taskService.EditAsync(
+                    id,
+                    vmodel,
+                    userId);
 
             if (!isEdited)
             {
@@ -144,7 +170,6 @@ namespace TaskManager.Controllers
                 nameof(Details),
                 new { id });
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)

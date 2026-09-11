@@ -40,8 +40,6 @@ namespace TaskManager.Services
                                   + " "
                                   + t.AssignedUser.LastName,
 
-                            ProjectId = t.ProjectId,
-                            ProjectName = p.Name
                         })
                         .OrderBy(t => t.Status)
                         .ThenByDescending(t => t.Priority)
@@ -234,6 +232,49 @@ namespace TaskManager.Services
             await dbContext.SaveChangesAsync();
 
             return true;
+        }
+        public async Task<IEnumerable<TaskAssigneeViewModel>> GetProjectAssigneesAsync(int projectId,string userId)
+        {
+            bool hasAccess = await dbContext.Projects
+                .AsNoTracking()
+                .AnyAsync(p =>
+                    p.Id == projectId &&
+                    (p.OwnerId == userId ||
+                     p.ProjectMembers.Any(pm => pm.UserId == userId)));
+
+            if (!hasAccess)
+            {
+                return Enumerable.Empty<TaskAssigneeViewModel>();
+            }
+
+            TaskAssigneeViewModel? owner = await dbContext.Projects
+                .AsNoTracking()
+                .Where(p => p.Id == projectId)
+                .Select(p => new TaskAssigneeViewModel
+                {
+                    Id = p.OwnerId,
+                    FullName = p.Owner.FirstName + " " + p.Owner.LastName
+                })
+                .FirstOrDefaultAsync();
+
+            List<TaskAssigneeViewModel> members = await dbContext.ProjectMembers
+                .AsNoTracking()
+                .Where(pm => pm.ProjectId == projectId)
+                .Select(pm => new TaskAssigneeViewModel
+                {
+                    Id = pm.UserId,
+                    FullName = pm.User.FirstName + " " + pm.User.LastName
+                })
+                .ToListAsync();
+
+            if (owner != null && !members.Any(m => m.Id == owner.Id))
+            {
+                members.Add(owner);
+            }
+
+            return members
+                .OrderBy(m => m.FullName)
+                .ToList();
         }
     }
 }

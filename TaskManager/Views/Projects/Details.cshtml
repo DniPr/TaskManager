@@ -161,6 +161,13 @@
                         Project tasks will appear here.
                     </p>
 
+                    <a asp-controller="Tasks"
+                       asp-action="Index"
+                       asp-route-projectId="@Model.Id"
+                       class="btn btn-primary">
+                        View Tasks
+                    </a>
+
                 </div>
             </div>
         </div>

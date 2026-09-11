@@ -15,9 +15,5 @@ namespace TaskManager.ViewModels.TaskViewModels
         public DateTime? Deadline { get; set; }
 
         public string? AssignedUserName { get; set; }
-
-        public int ProjectId { get; set; }
-
-        public string ProjectName { get; set; } = null!;
     }
 }

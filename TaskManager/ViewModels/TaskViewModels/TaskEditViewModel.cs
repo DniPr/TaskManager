@@ -25,5 +25,6 @@ namespace TaskManager.ViewModels.TaskViewModels
         public int ProjectId { get; set; }
 
         public string? AssignedUserId { get; set; }
+        public IEnumerable<TaskAssigneeViewModel> Assignees { get; set; } = new List<TaskAssigneeViewModel>();
     }
 }

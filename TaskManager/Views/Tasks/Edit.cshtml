@@ -106,9 +106,19 @@
                                 Assigned User
                             </label>
 
-                            <input asp-for="AssignedUserId"
-                                   class="form-control"
-                                   placeholder="User ID (optional)" />
+                            <select asp-for="AssignedUserId"
+                                    class="form-select">
+
+                                <option value="">Unassigned</option>
+
+                                @foreach (var user in Model.Assignees)
+                                {
+                                    <option value="@user.Id">
+                                        @user.FullName
+                                    </option>
+                                }
+
+                            </select>
 
                             <span asp-validation-for="AssignedUserId"
                                   class="text-danger">

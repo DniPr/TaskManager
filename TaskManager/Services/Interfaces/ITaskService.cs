@@ -15,5 +15,7 @@ namespace TaskManager.Services.Interfaces
         Task<bool> EditAsync(int id,TaskEditViewModel vmodel,string userId);
 
         Task<bool> DeleteAsync(int id,string userId);
+
+        Task<IEnumerable<TaskAssigneeViewModel>> GetProjectAssigneesAsync(int projectId,string userId);
     }
 }
