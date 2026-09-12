@@ -15,23 +15,24 @@
             </p>
         </div>
 
-        <div class="d-flex gap-2">
+        @if (Model.CanModify)
+        {
+            <div class="d-flex gap-2">
+                <a asp-controller="Tasks"
+                   asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-primary">
+                    Edit
+                </a>
 
-            <a asp-controller="Tasks"
-               asp-action="Edit"
-               asp-route-id="@Model.Id"
-               class="btn btn-outline-primary">
-                Edit
-            </a>
-
-            <a asp-controller="Tasks"
-               asp-action="Delete"
-               asp-route-id="@Model.Id"
-               class="btn btn-outline-danger">
-                Delete
-            </a>
-
-        </div>
+                <a asp-controller="Tasks"
+                   asp-action="Delete"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-danger">
+                    Delete
+                </a>
+            </div>
+        }
     </div>
 
     <div class="row g-4">

@@ -18,6 +18,7 @@ namespace TaskManager.ViewModels.TaskViewModels
         public string? AssignedUserId { get; set; }
         public string? AssignedUserName { get; set; }
         public int CommentsCount { get; set; }
+        public bool CanModify { get; set; }
         public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
         public CommentCreateViewModel NewComment { get; set; } = new CommentCreateViewModel();
     }

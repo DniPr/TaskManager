@@ -82,6 +82,11 @@ namespace TaskManager.Services
                         : t.AssignedUser.FirstName + " " + t.AssignedUser.LastName,
 
                     CommentsCount = t.Comments.Count(),
+
+                    CanModify =
+                    t.Project.OwnerId == userId ||
+                    t.CreatedByUserId == userId,
+
                     Comments = t.Comments
                     .OrderBy(c => c.CreatedOn)
                     .Select(c => new CommentViewModel
