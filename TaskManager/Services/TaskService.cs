@@ -138,6 +138,7 @@ namespace TaskManager.Services
                 Deadline = vmodel.Deadline,
                 ProjectId = vmodel.ProjectId,
                 AssignedUserId = vmodel.AssignedUserId,
+                CreatedByUserId = userId,
 
                 Status = TaskItemStatus.ToDo,
                 CreatedOn = DateTime.UtcNow
@@ -171,7 +172,6 @@ namespace TaskManager.Services
         {
             TaskItem? task = await dbContext.TaskItems
                 .Include(t => t.Project)
-                    .ThenInclude(p => p.ProjectMembers)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
@@ -179,11 +179,11 @@ namespace TaskManager.Services
                 return false;
             }
 
-            bool hasAccess =
+            bool canModify =
                 task.Project.OwnerId == userId ||
-                task.Project.ProjectMembers.Any(pm => pm.UserId == userId);
+                task.CreatedByUserId == userId;
 
-            if (!hasAccess)
+            if (!canModify)
             {
                 return false;
             }
@@ -228,7 +228,6 @@ namespace TaskManager.Services
         {
             TaskItem? task = await dbContext.TaskItems
                 .Include(t => t.Project)
-                    .ThenInclude(p => p.ProjectMembers)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (task == null)
@@ -236,11 +235,11 @@ namespace TaskManager.Services
                 return false;
             }
 
-            bool hasAccess =
+            bool canModify =
                 task.Project.OwnerId == userId ||
-                task.Project.ProjectMembers.Any(pm => pm.UserId == userId);
+                task.CreatedByUserId == userId;
 
-            if (!hasAccess)
+            if (!canModify)
             {
                 return false;
             }

@@ -21,5 +21,7 @@
         public int TasksCount { get; set; }
 
         public int CompletedTasksCount { get; set; }
+
+        public bool IsOwner { get; set; }
     }
 }

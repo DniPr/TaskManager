@@ -78,6 +78,12 @@ namespace TaskManager.Data
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<TaskItem>()
+                .HasOne(t => t.CreatedByUser)
+                .WithMany(u => u.CreatedTasks)
+                .HasForeignKey(t => t.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

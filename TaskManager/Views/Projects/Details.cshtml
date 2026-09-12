@@ -21,6 +21,8 @@
             </p>
         </div>
 
+        @if(@Model.IsOwner)
+        {
         <div class="d-flex gap-2">
             <a asp-controller="Projects"
                asp-action="Edit"
@@ -36,6 +38,7 @@
                 Delete
             </a>
         </div>
+        }
     </div>
 
     <div class="row g-4">
@@ -192,13 +195,24 @@
                         View and manage the members of this project.
                     </p>
 
-                    <a asp-controller="ProjectMembers"
-                       asp-action="Index"
-                       asp-route-projectId="@Model.Id"
-                       class="btn btn-primary">
-                        Manage Members
-                    </a>
-
+                    @if (Model.IsOwner)
+                    {
+                        <a asp-controller="ProjectMembers"
+                           asp-action="Index"
+                           asp-route-projectId="@Model.Id"
+                           class="btn btn-primary">
+                            Manage Members
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="ProjectMembers"
+                           asp-action="Index"
+                           asp-route-projectId="@Model.Id"
+                           class="btn btn-outline-primary">
+                            View Members
+                        </a>
+                    }
                 </div>
             </div>
         </div>

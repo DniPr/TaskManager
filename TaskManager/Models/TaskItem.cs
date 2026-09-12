@@ -42,6 +42,12 @@ namespace TaskManager.Models
 
         public virtual ApplicationUser? AssignedUser { get; set; }
 
+        [Required]
+        [ForeignKey(nameof(CreatedByUser))]
+        public string CreatedByUserId { get; set; } = null!;
+
+        public virtual ApplicationUser CreatedByUser { get; set; } = null!;
+
 
         public virtual ICollection<Comment> Comments { get; set; }
             = new HashSet<Comment>();

@@ -59,7 +59,8 @@ namespace TaskManager.Services
                     MembersCount = p.ProjectMembers.Count(),
                     TasksCount = p.Tasks.Count(),
                     CompletedTasksCount = p.Tasks.Count(t =>
-                        t.Status == TaskItemStatus.Completed)
+                        t.Status == TaskItemStatus.Completed),
+                    IsOwner = p.OwnerId == userId
                 })
                 .FirstOrDefaultAsync();
         }

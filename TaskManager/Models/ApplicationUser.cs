@@ -26,5 +26,8 @@ namespace TaskManager.Models
 
         public virtual ICollection<Comment> Comments { get; set; }
             = new HashSet<Comment>();
+
+        public virtual ICollection<TaskItem> CreatedTasks { get; set; } 
+            = new HashSet<TaskItem>();
     }
 }
