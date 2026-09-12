@@ -26,6 +26,8 @@ namespace TaskManager.Services
                      p.ProjectMembers.Any(pm => pm.UserId == userId)))
                 .Select(p => new TaskIndexPageViewModel
                 {
+                    ProjectId = p.Id,
+                    ProjectName = p.Name,
                     Tasks = p.Tasks
                         .Select(t => new TaskIndexViewModel
                         {

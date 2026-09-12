@@ -250,20 +250,16 @@
                           asp-action="Create"
                           method="post">
 
-                        <input asp-for="NewComment.TaskItemId"
-                               type="hidden" />
+                        <input type="hidden"
+                               name="TaskItemId"
+                               value="@Model.Id" />
 
                         <div class="mb-3">
 
-                            <textarea asp-for="NewComment.Content"
+                            <textarea name="Content"
                                       class="form-control"
                                       rows="3"
-                                      placeholder="Write a comment...">
-                </textarea>
-
-                            <span asp-validation-for="NewComment.Content"
-                                  class="text-danger">
-                            </span>
+                                      placeholder="Write a comment..."></textarea>
 
                         </div>
 
@@ -273,7 +269,6 @@
                         </button>
 
                     </form>
-
                 </div>
             </div>
         </div>
