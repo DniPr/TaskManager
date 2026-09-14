@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Data;
+using TaskManager.Data.Seed;
 using TaskManager.Models;
 using TaskManager.Services;
 using TaskManager.Services.Interfaces;
+using TaskManager.Data.Seed;
 
 namespace TaskManager
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +23,11 @@ namespace TaskManager
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IProjectService, ProjectService>();
@@ -31,6 +36,24 @@ namespace TaskManager
             builder.Services.AddScoped<ICommentService, CommentService>();
 
             var app = builder.Build();
+
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                RoleManager<IdentityRole> roleManager =
+                    scope.ServiceProvider
+                        .GetRequiredService<RoleManager<IdentityRole>>();
+
+                UserManager<ApplicationUser> userManager =
+                    scope.ServiceProvider
+                        .GetRequiredService<UserManager<ApplicationUser>>();
+
+                await RoleSeed.SeedRolesAsync(roleManager);
+
+                await AdminSeed.SeedAdminAsync(
+                    userManager,
+                    builder.Configuration);
+            }
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
