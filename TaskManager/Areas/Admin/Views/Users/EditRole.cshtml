@@ -1,0 +1,100 @@
+﻿@model TaskManager.Areas.Admin.Models.AdminUserRoleViewModel
+
+@{
+    ViewData["Title"] = "Change User Role";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-3">
+                        Change User Role
+                    </h2>
+
+                    <p class="text-muted">
+                        Update the application role for this user.
+                    </p>
+
+                    <form asp-area="Admin"
+                          asp-controller="Users"
+                          asp-action="EditRole"
+                          method="post">
+
+                        <input asp-for="UserId" type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                User
+                            </label>
+
+                            <input value="@Model.FullName"
+                                   class="form-control"
+                                   disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Email
+                            </label>
+
+                            <input value="@Model.Email"
+                                   class="form-control"
+                                   disabled />
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Role"
+                                   class="form-label">
+                            </label>
+
+                            <select asp-for="Role"
+                                    class="form-select">
+                                <option value="User">
+                                    User
+                                </option>
+
+                                <option value="Admin">
+                                    Admin
+                                </option>
+                            </select>
+
+                            <span asp-validation-for="Role"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-area="Admin"
+                               asp-controller="Users"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Save Role
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

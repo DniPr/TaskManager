@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Areas.Admin.Services;
+using TaskManager.Areas.Admin.Services.Interfaces;
 using TaskManager.Data;
+using TaskManager.Data.Seed;
 using TaskManager.Data.Seed;
 using TaskManager.Models;
 using TaskManager.Services;
 using TaskManager.Services.Interfaces;
-using TaskManager.Data.Seed;
 
 namespace TaskManager
 {
@@ -34,6 +36,7 @@ namespace TaskManager
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IProjectMemberService, ProjectMemberService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IAdminUserService, AdminUserService>();
 
             var app = builder.Build();
 
