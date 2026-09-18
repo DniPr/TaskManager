@@ -2,101 +2,141 @@
 
 @{
     ViewData["Title"] = "Project Details";
-
-    int progress = Model.TasksCount == 0
-        ? 0
-        : (int)Math.Round(
-            (double)Model.CompletedTasksCount /
-            Model.TasksCount * 100);
 }
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-start mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+
         <div>
-            <h2 class="mb-1">@Model.Name</h2>
+            <h2 class="fw-bold mb-1">
+                @Model.Name
+            </h2>
 
             <p class="text-muted mb-0">
-                Project overview and progress
+                Project overview and management.
             </p>
         </div>
 
-        @if(@Model.IsOwner)
-        {
-        <div class="d-flex gap-2">
-            <a asp-controller="Projects"
-               asp-action="Edit"
-               asp-route-id="@Model.Id"
-               class="btn btn-outline-primary">
-                Edit
-            </a>
+        <div class="d-flex flex-wrap gap-2">
+
+            @if (Model.IsOwner)
+            {
+                <a asp-controller="Projects"
+                   asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-primary">
+                    Edit Project
+                </a>
+
+                <a asp-controller="Projects"
+                   asp-action="Delete"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-danger">
+                    Delete Project
+                </a>
+            }
 
             <a asp-controller="Projects"
-               asp-action="Delete"
-               asp-route-id="@Model.Id"
-               class="btn btn-outline-danger">
-                Delete
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back to Projects
             </a>
+
         </div>
-        }
+
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
 
         <div class="col-lg-8">
+
             <div class="card shadow-sm h-100">
-                <div class="card-body">
+                <div class="card-body p-4">
 
-                    <h5 class="card-title mb-3">
+                    <h4 class="mb-3">
                         Project Information
-                    </h5>
+                    </h4>
 
-                    <p>
-                        <strong>Description:</strong>
-                    </p>
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p class="text-muted mb-4">
+                            @Model.Description
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-4">
+                            No description provided.
+                        </p>
+                    }
 
-                    <p class="text-muted">
-                        @(string.IsNullOrWhiteSpace(Model.Description)
-                                                ? "No description provided."
-                                                : Model.Description)
-                    </p>
+                    <div class="row g-3">
 
-                    <hr />
+                        <div class="col-md-6">
+                            <div class="project-detail-item">
 
-                    <div class="row">
+                                <span class="text-muted d-block">
+                                    Owner
+                                </span>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Owner</strong>
-                            <div class="text-muted">
-                                @Model.OwnerName
+                                <span class="fw-semibold">
+                                    @Model.OwnerName
+                                </span>
+
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Created On</strong>
-                            <div class="text-muted">
-                                @Model.CreatedOn.ToString("dd.MM.yyyy")
+                        <div class="col-md-6">
+                            <div class="project-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Created On
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @Model.CreatedOn.ToString("dd.MM.yyyy")
+                                </span>
+
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Deadline</strong>
-                            <div class="text-muted">
-                                @if (Model.Deadline.HasValue)
+                        <div class="col-md-6">
+                            <div class="project-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Deadline
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @(Model.Deadline.HasValue
+                                                                        ? Model.Deadline.Value.ToString("dd.MM.yyyy")
+                                                                        : "No deadline")
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="project-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Your Access
+                                </span>
+
+                                @if (Model.IsOwner)
                                 {
-                                    @Model.Deadline.Value.ToString("dd.MM.yyyy")
+                                    <span class="badge bg-primary">
+                                        Project Owner
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span>No deadline</span>
+                                    <span class="badge bg-secondary">
+                                        Project Member
+                                    </span>
                                 }
-                            </div>
-                        </div>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Members</strong>
-                            <div class="text-muted">
-                                @Model.MembersCount
                             </div>
                         </div>
 
@@ -104,127 +144,125 @@
 
                 </div>
             </div>
+
         </div>
 
         <div class="col-lg-4">
+
             <div class="card shadow-sm h-100">
-                <div class="card-body">
+                <div class="card-body p-4">
 
-                    <h5 class="card-title mb-3">
-                        Progress
-                    </h5>
+                    <h4 class="mb-4">
+                        Project Statistics
+                    </h4>
 
-                    <div class="mb-2 d-flex justify-content-between">
-                        <span>Completed Tasks</span>
-                        <span>
-                            @Model.CompletedTasksCount / @Model.TasksCount
-                        </span>
-                    </div>
-
-                    <div class="progress mb-3">
-                        <div class="progress-bar"
-                             role="progressbar"
-                             style="width: @progress%"
-                             aria-valuenow="@progress"
-                             aria-valuemin="0"
-                             aria-valuemax="100">
-                            @progress%
-                        </div>
-                    </div>
-
-                    <p class="text-muted mb-0">
-                        @progress% of all project tasks are completed.
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row g-4 mt-1">
-
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">
-                            Tasks
-                        </h5>
-
-                        <span class="badge bg-secondary">
-                            @Model.TasksCount
-                        </span>
-                    </div>
-
-                    <hr />
-
-                    <p class="text-muted mb-0">
-                        Project tasks will appear here.
-                    </p>
-
-                    <a asp-controller="Tasks"
-                       asp-action="Index"
-                       asp-route-projectId="@Model.Id"
-                       class="btn btn-primary">
-                        View Tasks
-                    </a>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">
                             Members
-                        </h5>
+                        </span>
 
-                        <span class="badge bg-secondary">
+                        <span class="fw-bold">
                             @Model.MembersCount
                         </span>
                     </div>
 
-                    <hr />
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">
+                            Tasks
+                        </span>
 
-                    <p class="text-muted mb-3">
-                        View and manage the members of this project.
-                    </p>
+                        <span class="fw-bold">
+                            @Model.TasksCount
+                        </span>
+                    </div>
 
-                    @if (Model.IsOwner)
-                    {
-                        <a asp-controller="ProjectMembers"
-                           asp-action="Index"
-                           asp-route-projectId="@Model.Id"
-                           class="btn btn-primary">
-                            Manage Members
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-controller="ProjectMembers"
-                           asp-action="Index"
-                           asp-route-projectId="@Model.Id"
-                           class="btn btn-outline-primary">
-                            View Members
-                        </a>
-                    }
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">
+                            Completed Tasks
+                        </span>
+
+                        <span class="fw-bold">
+                            @Model.CompletedTasksCount
+                        </span>
+                    </div>
+
                 </div>
             </div>
+
         </div>
 
     </div>
 
-    <div class="mt-4">
-        <a asp-controller="Projects"
-           asp-action="Index"
-           class="btn btn-outline-secondary">
-            Back to Projects
-        </a>
+    <div class="row g-4">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h4 class="mb-2">
+                        Tasks
+                    </h4>
+
+                    <p class="text-muted">
+                        View and manage tasks for this project.
+                    </p>
+
+                    <div class="mt-auto">
+                        <a asp-controller="Tasks"
+                           asp-action="Index"
+                           asp-route-projectId="@Model.Id"
+                           class="btn btn-primary">
+                            View Tasks
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h4 class="mb-2">
+                        Project Members
+                    </h4>
+
+                    <p class="text-muted">
+                        View the users participating in this project.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        @if (Model.IsOwner)
+                        {
+                            <a asp-controller="ProjectMembers"
+                               asp-action="Index"
+                               asp-route-projectId="@Model.Id"
+                               class="btn btn-primary">
+                                Manage Members
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="ProjectMembers"
+                               asp-action="Index"
+                               asp-route-projectId="@Model.Id"
+                               class="btn btn-outline-primary">
+                                View Members
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </div>

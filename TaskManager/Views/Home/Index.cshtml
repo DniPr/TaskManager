@@ -1,8 +1,239 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TaskManager.ViewModels.HomeViewModels.HomeDashboardViewModel
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="row align-items-center hero-section">
+
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    Welcome to TaskManager
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    Manage your projects, tasks and team collaboration
+                    from one place.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <a asp-controller="Projects"
+                       asp-action="Index"
+                       class="btn btn-primary btn-lg">
+                        View Projects
+                    </a>
+
+                    <a asp-controller="Projects"
+                       asp-action="Create"
+                       class="btn btn-outline-primary btn-lg">
+                        Create Project
+                    </a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-area="Admin"
+                           asp-controller="Admin"
+                           asp-action="Index"
+                           class="btn btn-outline-dark btn-lg">
+                            Admin Dashboard
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-body py-4">
+
+                        <h2 class="fw-bold">
+                            @Model.ProjectsCount
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Projects
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-body py-4">
+
+                        <h2 class="fw-bold">
+                            @Model.TasksCount
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Tasks
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-body py-4">
+
+                        <h2 class="fw-bold">
+                            @Model.CompletedTasksCount
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Completed Tasks
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card shadow-sm mb-5 progress-card">
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="fw-semibold">
+                        Overall Task Progress
+                    </span>
+
+                    <span class="fw-semibold">
+                        @Model.CompletionPercentage%
+                    </span>
+
+                </div>
+
+                <div class="progress"
+                     role="progressbar"
+                     aria-valuenow="@Model.CompletionPercentage"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+
+                    <div class="progress-bar"
+                         style="width: @Model.CompletionPercentage%">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 feature-card">
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            Projects
+                        </h4>
+
+                        <p class="card-text text-muted">
+                            Create projects, set deadlines
+                            and organize project members.
+                        </p>
+
+                        <a asp-controller="Projects"
+                           asp-action="Index"
+                           class="btn btn-outline-primary">
+                            Open Projects
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 feature-card">
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            Tasks
+                        </h4>
+
+                        <p class="card-text text-muted">
+                            Manage task priorities, statuses,
+                            assignments and deadlines.
+                        </p>
+
+                        <a asp-controller="Projects"
+                           asp-action="Index"
+                           class="btn btn-outline-primary">
+                            View Tasks
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 feature-card">
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            Collaboration
+                        </h4>
+
+                        <p class="card-text text-muted">
+                            Work together with project members
+                            and communicate through comments.
+                        </p>
+
+                        <a asp-controller="Projects"
+                           asp-action="Index"
+                           class="btn btn-outline-primary">
+                            Manage Collaboration
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5 hero-section">
+
+            <h1 class="display-4 fw-bold mb-3">
+                TaskManager
+            </h1>
+
+            <p class="lead text-muted mb-4">
+                A simple project and task management platform
+                for organizing work and collaboration.
+            </p>
+
+            <div class="d-flex justify-content-center gap-2">
+
+                <a asp-area="Identity"
+                   asp-page="/Account/Register"
+                   class="btn btn-primary btn-lg">
+                    Get Started
+                </a>
+
+                <a asp-area="Identity"
+                   asp-page="/Account/Login"
+                   class="btn btn-outline-secondary btn-lg">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+    }
+
 </div>

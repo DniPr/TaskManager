@@ -6,131 +6,200 @@
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-start mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+
         <div>
-            <h2 class="mb-1">@Model.Title</h2>
+            <h2 class="fw-bold mb-1">
+                @Model.Title
+            </h2>
 
             <p class="text-muted mb-0">
-                Task details and progress
+                Project: @Model.ProjectName
             </p>
         </div>
 
-        @if (Model.CanModify)
-        {
-            <div class="d-flex gap-2">
+        <div class="d-flex flex-wrap gap-2">
+
+            @if (Model.CanModify)
+            {
                 <a asp-controller="Tasks"
                    asp-action="Edit"
                    asp-route-id="@Model.Id"
                    class="btn btn-outline-primary">
-                    Edit
+                    Edit Task
                 </a>
 
                 <a asp-controller="Tasks"
                    asp-action="Delete"
                    asp-route-id="@Model.Id"
                    class="btn btn-outline-danger">
-                    Delete
+                    Delete Task
                 </a>
-            </div>
-        }
+            }
+
+            <a asp-controller="Tasks"
+               asp-action="Index"
+               asp-route-projectId="@Model.ProjectId"
+               class="btn btn-outline-secondary">
+                Back to Tasks
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
 
         <div class="col-lg-8">
 
-            <div class="card shadow-sm">
-                <div class="card-body">
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4">
 
-                    <h5 class="card-title mb-3">
+                    <h4 class="mb-3">
                         Task Information
-                    </h5>
+                    </h4>
 
-                    <p>
-                        <strong>Description:</strong>
-                    </p>
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p class="text-muted mb-4">
+                            @Model.Description
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-4">
+                            No description provided.
+                        </p>
+                    }
 
-                    <p class="text-muted">
-                        @(string.IsNullOrWhiteSpace(Model.Description)
-                                                ? "No description provided."
-                                                : Model.Description)
-                    </p>
+                    <div class="row g-3">
 
-                    <hr />
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
 
-                    <div class="row">
+                                <span class="text-muted d-block">
+                                    Status
+                                </span>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Status</strong>
-
-                            <div class="text-muted">
-                                @Model.Status
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <strong>Priority</strong>
-
-                            <div class="text-muted">
-                                @Model.Priority
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <strong>Assigned To</strong>
-
-                            <div class="text-muted">
-
-                                @if (string.IsNullOrWhiteSpace(Model.AssignedUserName))
+                                @switch (Model.Status)
                                 {
-                                    <span>Unassigned</span>
-                                }
-                                else
-                                {
-                                    @Model.AssignedUserName
-                                }
+                                    case TaskManager.Models.Enums.TaskItemStatus.ToDo:
+                                        <span class="badge bg-secondary">
+                                            To Do
+                                        </span>
+                                        break;
 
-                            </div>
-                        </div>
+                                    case TaskManager.Models.Enums.TaskItemStatus.InProgress:
+                                        <span class="badge bg-warning text-dark">
+                                            In Progress
+                                        </span>
+                                        break;
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Created On</strong>
-
-                            <div class="text-muted">
-                                @Model.CreatedOn.ToString("dd.MM.yyyy")
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <strong>Deadline</strong>
-
-                            <div class="text-muted">
-
-                                @if (Model.Deadline.HasValue)
-                                {
-                                    @Model.Deadline.Value.ToString("dd.MM.yyyy")
-                                }
-                                else
-                                {
-                                    <span>No deadline</span>
+                                    case TaskManager.Models.Enums.TaskItemStatus.Completed:
+                                        <span class="badge bg-success">
+                                            Completed
+                                        </span>
+                                        break;
                                 }
 
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Completed On</strong>
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
 
-                            <div class="text-muted">
+                                <span class="text-muted d-block">
+                                    Priority
+                                </span>
 
-                                @if (Model.CompletedOn.HasValue)
+                                @switch (Model.Priority)
                                 {
-                                    @Model.CompletedOn.Value.ToString("dd.MM.yyyy")
+                                    case TaskManager.Models.Enums.TaskPriority.Low:
+                                        <span class="badge bg-secondary">
+                                            Low
+                                        </span>
+                                        break;
+
+                                    case TaskManager.Models.Enums.TaskPriority.Medium:
+                                        <span class="badge bg-primary">
+                                            Medium
+                                        </span>
+                                        break;
+
+                                    case TaskManager.Models.Enums.TaskPriority.High:
+                                        <span class="badge bg-warning text-dark">
+                                            High
+                                        </span>
+                                        break;
+
+                                    case TaskManager.Models.Enums.TaskPriority.Critical:
+                                        <span class="badge bg-danger">
+                                            Critical
+                                        </span>
+                                        break;
                                 }
-                                else
-                                {
-                                    <span>Not completed</span>
-                                }
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Assigned To
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @(string.IsNullOrWhiteSpace(Model.AssignedUserName)
+                                                                        ? "Unassigned"
+                                                                        : Model.AssignedUserName)
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Created On
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @Model.CreatedOn.ToString("dd.MM.yyyy")
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Deadline
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @(Model.Deadline.HasValue
+                                                                        ? Model.Deadline.Value.ToString("dd.MM.yyyy")
+                                                                        : "No deadline")
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="task-detail-item">
+
+                                <span class="text-muted d-block">
+                                    Completed On
+                                </span>
+
+                                <span class="fw-semibold">
+                                    @(Model.CompletedOn.HasValue
+                                                                        ? Model.CompletedOn.Value.ToString("dd.MM.yyyy")
+                                                                        : "Not completed")
+                                </span>
 
                             </div>
                         </div>
@@ -144,151 +213,161 @@
 
         <div class="col-lg-4">
 
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4">
 
-                    <h5 class="card-title mb-3">
-                        Project
-                    </h5>
+                    <h4 class="mb-3">
+                        Task Overview
+                    </h4>
 
-                    <p class="mb-3">
-                        @Model.ProjectName
-                    </p>
-
-                    <a asp-controller="Projects"
-                       asp-action="Details"
-                       asp-route-id="@Model.ProjectId"
-                       class="btn btn-outline-secondary w-100">
-                        View Project
-                    </a>
-
-                </div>
-            </div>
-
-            <div class="card shadow-sm">
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">
                             Comments
-                        </h5>
+                        </span>
 
-                        <span class="badge bg-secondary">
+                        <span class="fw-bold">
                             @Model.CommentsCount
                         </span>
                     </div>
 
-                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">
+                            Can Modify
+                        </span>
 
-                    @if (!Model.Comments.Any())
-                    {
-                        <p class="text-muted">
-                            No comments yet.
-                        </p>
-                    }
-                    else
-                    {
-                        <div class="mb-4">
+                        @if (Model.CanModify)
+                        {
+                            <span class="badge bg-success">
+                                Yes
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                No
+                            </span>
+                        }
+                    </div>
 
-                            @foreach (var comment in Model.Comments)
-                            {
-                                <div class="border rounded p-3 mb-3">
-
-                                    <div class="d-flex justify-content-between align-items-start">
-
-                                        <div>
-                                            <strong>
-                                                @comment.AuthorName
-                                            </strong>
-
-                                            <div class="text-muted small">
-                                                @comment.CreatedOn.ToString("dd.MM.yyyy HH:mm")
-                                            </div>
-                                        </div>
-
-                                        @if (comment.AuthorId == User.FindFirst(
-                                                                        System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
-                                        {
-                                            <form asp-controller="Comments"
-                                                  asp-action="Delete"
-                                                  method="post">
-
-                                                <input type="hidden"
-                                                       name="id"
-                                                       value="@comment.Id" />
-
-                                                <input type="hidden"
-                                                       name="taskId"
-                                                       value="@Model.Id" />
-
-                                                <button type="submit"
-                                                        class="btn btn-sm btn-outline-danger">
-                                                    Delete
-                                                </button>
-
-                                            </form>
-                                        }
-
-                                    </div>
-
-                                    <p class="mt-3 mb-0">
-                                        @comment.Content
-                                    </p>
-
-                                </div>
-                            }
-
-                        </div>
-                    }
-
-                    <hr />
-
-                    <h6 class="mb-3">
-                        Add Comment
-                    </h6>
-
-                    <form asp-controller="Comments"
-                          asp-action="Create"
-                          method="post">
-
-                        <input type="hidden"
-                               name="TaskItemId"
-                               value="@Model.Id" />
-
-                        <div class="mb-3">
-
-                            <textarea name="Content"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Write a comment..."></textarea>
-
-                        </div>
-
-                        <button type="submit"
-                                class="btn btn-primary">
-                            Add Comment
-                        </button>
-
-                    </form>
                 </div>
             </div>
+
         </div>
 
     </div>
 
-    <div class="mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-body p-4">
 
-        <a asp-controller="Tasks"
-           asp-action="Index"
-           asp-route-projectId="@Model.ProjectId"
-           class="btn btn-outline-secondary">
-            Back to Tasks
-        </a>
+            <h4 class="mb-3">
+                Add Comment
+            </h4>
 
+            <form asp-controller="Comments"
+                  asp-action="Create"
+                  method="post">
+
+                <input type="hidden"
+                       name="TaskItemId"
+                       value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Comment
+                    </label>
+
+                    <textarea name="Content"
+                              class="form-control"
+                              rows="3"
+                              maxlength="1000"
+                              placeholder="Write a comment..."></textarea>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Add Comment
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="mb-0">
+                    Comments
+                </h4>
+
+                <span class="badge bg-light text-dark border">
+                    @Model.CommentsCount
+                </span>
+
+            </div>
+
+            @if (!Model.Comments.Any())
+            {
+                <p class="text-muted mb-0">
+                    No comments yet.
+                </p>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-3">
+
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <div class="comment-item">
+
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+
+                                <div>
+
+                                    <div class="fw-semibold mb-1">
+                                        @comment.AuthorName
+                                    </div>
+
+                                    <div class="text-muted small mb-2">
+                                        @comment.CreatedOn.ToString("dd.MM.yyyy HH:mm")
+                                    </div>
+
+                                    <p class="mb-0">
+                                        @comment.Content
+                                    </p>
+
+                                </div>
+
+                                @if (comment.AuthorId == User.FindFirst(
+                                                        System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                                {
+                                    <form asp-controller="Comments"
+                                          asp-action="Delete"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@comment.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+
+                                    </form>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
     </div>
 
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

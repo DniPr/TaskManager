@@ -37,6 +37,7 @@ namespace TaskManager
             builder.Services.AddScoped<IProjectMemberService, ProjectMemberService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+            builder.Services.AddScoped<IHomeService, HomeService>();
 
             var app = builder.Build();
 

@@ -6,11 +6,14 @@
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h2 class="mb-1">My Projects</h2>
+            <h2 class="fw-bold mb-1">
+                Projects
+            </h2>
+
             <p class="text-muted mb-0">
-                Manage your projects and track their progress.
+                Manage your projects, tasks and team collaboration.
             </p>
         </div>
 
@@ -23,8 +26,24 @@
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">
-            You are not participating in any projects yet.
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-5">
+
+                <h4 class="mb-3">
+                    No projects yet
+                </h4>
+
+                <p class="text-muted mb-4">
+                    Create your first project and start organizing your tasks.
+                </p>
+
+                <a asp-controller="Projects"
+                   asp-action="Create"
+                   class="btn btn-primary">
+                    Create Project
+                </a>
+
+            </div>
         </div>
     }
     else
@@ -33,86 +52,102 @@
 
             @foreach (var project in Model)
             {
-                int progress = project.TasksCount == 0
-                ? 0
-                : (int)Math.Round(
-                (double)project.CompletedTasksCount /
-                project.TasksCount * 100);
+                <div class="col-md-6 col-xl-4">
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card shadow-sm h-100 project-card">
 
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
 
-                            <h5 class="card-title">
-                                @project.Name
-                            </h5>
+                            <div class="mb-3">
 
-                            <p class="card-text text-muted">
-                                @(string.IsNullOrWhiteSpace(project.Description)
-                                                        ? "No description provided."
-                                                        : project.Description)
-                    </p>
+                                <h4 class="card-title mb-2">
+                                    @project.Name
+                                </h4>
 
-                            <hr />
-
-                            <p class="mb-2">
-                                <strong>Owner:</strong>
-                                @project.OwnerName
-                            </p>
-
-                            <p class="mb-2">
-                                <strong>Members:</strong>
-                                @project.MembersCount
-                            </p>
-
-                            <p class="mb-2">
-                                <strong>Tasks:</strong>
-                                @project.CompletedTasksCount / @project.TasksCount
-                            </p>
-
-                            <p class="mb-3">
-                                <strong>Deadline:</strong>
-
-                        @if (project.Deadline.HasValue)
+                                @if (!string.IsNullOrWhiteSpace(project.Description))
                                 {
-                                    @project.Deadline.Value.ToString("dd.MM.yyyy")
+                                    <p class="text-muted">
+                                        @project.Description
+                                    </p>
                                 }
                                 else
                                 {
-                                    <span>No deadline</span>
+                                    <p class="text-muted">
+                                        No description provided.
+                                    </p>
                                 }
-                            </p>
 
-                            <div class="mb-2 d-flex justify-content-between">
-                                <span>Progress</span>
-                                <span>@progress%</span>
                             </div>
 
-                            <div class="progress mb-3">
-                                <div class="progress-bar"
-                                     role="progressbar"
-                                     style="width: @progress%"
-                                     aria-valuenow="@progress"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100">
-                                    @progress%
+                            <div class="mb-3">
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">
+                                        Owner
+                                    </span>
+
+                                    <span class="fw-semibold">
+                                        @project.OwnerName
+                                    </span>
                                 </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">
+                                        Members
+                                    </span>
+
+                                    <span class="fw-semibold">
+                                        @project.MembersCount
+                                    </span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">
+                                        Tasks
+                                    </span>
+
+                                    <span class="fw-semibold">
+                                        @project.TasksCount
+                                    </span>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">
+                                        Completed
+                                    </span>
+
+                                    <span class="fw-semibold">
+                                        @project.CompletedTasksCount
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            @if (project.Deadline.HasValue)
+                            {
+                                <div class="mb-3">
+                                    <span class="badge bg-light text-dark border">
+                                        Deadline:
+                                        @project.Deadline.Value.ToString("dd.MM.yyyy")
+                                    </span>
+                                </div>
+                            }
+
+                            <div class="mt-auto">
+
+                                <a asp-controller="Projects"
+                                   asp-action="Details"
+                                   asp-route-id="@project.Id"
+                                   class="btn btn-outline-primary w-100">
+                                    View Project
+                                </a>
+
                             </div>
 
                         </div>
 
-                        <div class="card-footer bg-transparent border-0">
-
-                            <a asp-controller="Projects"
-                               asp-action="Details"
-                               asp-route-id="@project.Id"
-                               class="btn btn-outline-primary w-100">
-                                View Project
-                            </a>
-
-                        </div>
                     </div>
+
                 </div>
             }
 
