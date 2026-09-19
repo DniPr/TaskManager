@@ -74,6 +74,7 @@ namespace TaskManager.Services
                 {
                     ProjectId = p.Id,
                     ProjectName = p.Name,
+                    IsOwner = p.OwnerId == userId,
 
                     Members = p.ProjectMembers
                         .Select(pm => new ProjectMemberViewModel

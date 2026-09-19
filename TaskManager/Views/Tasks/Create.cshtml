@@ -5,31 +5,41 @@
 }
 
 <div class="container mt-4">
+
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+
+        <div class="col-md-9 col-lg-7">
+
+            <div class="mb-4">
+
+                <h2 class="fw-bold mb-1">
+                    Create Task
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Add a new task to the project.
+                </p>
+
+            </div>
 
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-
-                    <h2 class="mb-3">Create Task</h2>
-
-                    <p class="text-muted">
-                        Add a new task to this project.
-                    </p>
 
                     <form asp-controller="Tasks"
                           asp-action="Create"
                           method="post">
 
-                        <input asp-for="ProjectId" type="hidden" />
+                        <input asp-for="ProjectId"
+                               type="hidden" />
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
 
                         <div class="mb-3">
+
                             <label asp-for="Title"
-                                   class="form-label">
+                                   class="form-label fw-semibold">
                             </label>
 
                             <input asp-for="Title"
@@ -39,62 +49,76 @@
                             <span asp-validation-for="Title"
                                   class="text-danger">
                             </span>
+
                         </div>
 
                         <div class="mb-3">
+
                             <label asp-for="Description"
-                                   class="form-label">
+                                   class="form-label fw-semibold">
                             </label>
 
                             <textarea asp-for="Description"
                                       class="form-control"
-                                      rows="5"
-                                      placeholder="Enter task description">
-                            </textarea>
+                                      rows="4"
+                                      placeholder="Enter task description"></textarea>
 
                             <span asp-validation-for="Description"
                                   class="text-danger">
                             </span>
+
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Priority"
-                                   class="form-label">
-                            </label>
+                        <div class="row">
 
-                            <select asp-for="Priority"
-                                    asp-items="Html.GetEnumSelectList<TaskManager.Models.Enums.TaskPriority>()"
-                                    class="form-select">
-                            </select>
+                            <div class="col-md-6 mb-3">
 
-                            <span asp-validation-for="Priority"
-                                  class="text-danger">
-                            </span>
-                        </div>
+                                <label asp-for="Priority"
+                                       class="form-label fw-semibold">
+                                </label>
 
-                        <div class="mb-3">
-                            <label asp-for="Deadline"
-                                   class="form-label">
-                            </label>
+                                <select asp-for="Priority"
+                                        class="form-select"
+                                        asp-items="Html.GetEnumSelectList<TaskManager.Models.Enums.TaskPriority>()">
+                                </select>
 
-                            <input asp-for="Deadline"
-                                   class="form-control" />
+                                <span asp-validation-for="Priority"
+                                      class="text-danger">
+                                </span>
 
-                            <span asp-validation-for="Deadline"
-                                  class="text-danger">
-                            </span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Deadline"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Deadline"
+                                       class="form-control"
+                                       type="date" />
+
+                                <span asp-validation-for="Deadline"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
                         </div>
 
                         <div class="mb-4">
+
                             <label asp-for="AssignedUserId"
-                                   class="form-label">
-                                Assigned User
+                                   class="form-label fw-semibold">
+                                Assigned To
                             </label>
 
                             <select asp-for="AssignedUserId"
                                     class="form-select">
 
-                                <option value="">Unassigned</option>
+                                <option value="">
+                                    Unassigned
+                                </option>
 
                                 @foreach (var user in Model.Assignees)
                                 {
@@ -108,6 +132,7 @@
                             <span asp-validation-for="AssignedUserId"
                                   class="text-danger">
                             </span>
+
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -130,8 +155,11 @@
 
                 </div>
             </div>
+
         </div>
+
     </div>
+
 </div>
 
 @section Scripts {

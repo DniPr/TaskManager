@@ -5,60 +5,72 @@
 }
 
 <div class="container mt-4">
+
     <div class="row justify-content-center">
+
         <div class="col-md-8 col-lg-6">
 
             <div class="card shadow-sm border-danger">
+
                 <div class="card-body p-4">
 
-                    <h2 class="text-danger mb-3">
+                    <h2 class="fw-bold text-danger mb-3">
                         Delete Task
                     </h2>
 
-                    <p class="mb-4">
+                    <p class="text-muted mb-4">
                         Are you sure you want to delete this task?
+                        This action cannot be undone.
                     </p>
 
-                    <div class="mb-4">
+                    <div class="p-3 bg-light rounded mb-4">
 
-                        <h5>@Model.Title</h5>
+                        <h4 class="mb-2">
+                            @Model.Title
+                        </h4>
 
                         @if (!string.IsNullOrWhiteSpace(Model.Description))
                         {
-                            <p class="text-muted">
+                            <p class="text-muted mb-3">
                                 @Model.Description
                             </p>
                         }
 
-                        <p class="mb-1">
-                            <strong>Project:</strong>
-                            @Model.ProjectName
-                        </p>
+                        <div class="d-flex justify-content-between mb-2">
 
-                        <p class="mb-1">
-                            <strong>Status:</strong>
-                            @Model.Status
-                        </p>
+                            <span class="text-muted">
+                                Project
+                            </span>
 
-                        <p class="mb-1">
-                            <strong>Priority:</strong>
-                            @Model.Priority
-                        </p>
+                            <span class="fw-semibold">
+                                @Model.ProjectName
+                            </span>
 
-                        <p class="mb-0">
-                            <strong>Assigned To:</strong>
+                        </div>
 
-                            @if (string.IsNullOrWhiteSpace(Model.AssignedUserName))
-                            {
-                                <span class="text-muted">
-                                    Unassigned
-                                </span>
-                            }
-                            else
-                            {
-                                @Model.AssignedUserName
-                            }
-                        </p>
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <span class="text-muted">
+                                Status
+                            </span>
+
+                            <span class="fw-semibold">
+                                @Model.Status
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <span class="text-muted">
+                                Priority
+                            </span>
+
+                            <span class="fw-semibold">
+                                @Model.Priority
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -68,8 +80,11 @@
 
                     <form asp-controller="Tasks"
                           asp-action="DeleteConfirmed"
-                          asp-route-id="@Model.Id"
                           method="post">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.Id" />
 
                         <input type="hidden"
                                name="projectId"
@@ -94,7 +109,11 @@
                     </form>
 
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </div>

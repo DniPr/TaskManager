@@ -203,3 +203,11 @@ h5 {
     .comment-item p {
         word-break: break-word;
     }
+
+.admin-card .card-title {
+    font-weight: 700;
+}
+
+.admin-card .card-body {
+    min-height: 220px;
+}

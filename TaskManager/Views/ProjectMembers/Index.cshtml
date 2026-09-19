@@ -27,12 +27,15 @@
                 Back to Project
             </a>
 
+            @if(Model.IsOwner)
+            {
             <a asp-controller="ProjectMembers"
                asp-action="Add"
                asp-route-projectId="@Model.ProjectId"
                class="btn btn-primary">
                 Add Member
             </a>
+            }
 
         </div>
 
@@ -99,6 +102,8 @@
 
                                     <td class="text-end pe-4">
 
+                                        @if(Model.IsOwner)
+                                        {
                                         <form asp-controller="ProjectMembers"
                                               asp-action="Remove"
                                               method="post"
@@ -118,6 +123,7 @@
                                             </button>
 
                                         </form>
+                                        }
 
                                     </td>
 

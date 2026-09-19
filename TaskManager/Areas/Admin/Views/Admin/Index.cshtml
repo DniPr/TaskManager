@@ -3,24 +3,114 @@
 }
 
 <div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
 
-            <h2 class="mb-3">
-                Admin Dashboard
-            </h2>
+    <div class="mb-4">
 
-            <p class="text-muted mb-4">
-                Manage users, projects and application data.
-            </p>
+        <h2 class="fw-bold mb-1">
+            Admin Dashboard
+        </h2>
 
-            <a asp-area="Admin"
-               asp-controller="Users"
-               asp-action="Index"
-               class="btn btn-primary">
-                Manage Users
-            </a>
+        <p class="text-muted mb-0">
+            Manage users and application administration.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card shadow-sm h-100 admin-card">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h4 class="card-title mb-3">
+                        User Management
+                    </h4>
+
+                    <p class="text-muted">
+                        View registered users and manage their application roles.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <a asp-area="Admin"
+                           asp-controller="Users"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Manage Users
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card shadow-sm h-100 admin-card">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h4 class="card-title mb-3">
+                        Projects
+                    </h4>
+
+                    <p class="text-muted">
+                        Return to the main application and manage your projects.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <a asp-area=""
+                           asp-controller="Projects"
+                           asp-action="Index"
+                           class="btn btn-outline-primary">
+                            View Projects
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card shadow-sm h-100 admin-card">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h4 class="card-title mb-3">
+                        Home
+                    </h4>
+
+                    <p class="text-muted">
+                        Return to your TaskManager dashboard.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <a asp-area=""
+                           asp-controller="Home"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Back to Home
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>

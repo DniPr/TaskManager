@@ -5,58 +5,70 @@
 }
 
 <div class="container mt-4">
+
     <div class="row justify-content-center">
+
         <div class="col-md-8 col-lg-6">
+
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">
+                    Change User Role
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Update the application role for this user.
+                </p>
+            </div>
 
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-
-                    <h2 class="mb-3">
-                        Change User Role
-                    </h2>
-
-                    <p class="text-muted">
-                        Update the application role for this user.
-                    </p>
 
                     <form asp-area="Admin"
                           asp-controller="Users"
                           asp-action="EditRole"
                           method="post">
 
-                        <input asp-for="UserId" type="hidden" />
+                        <input asp-for="UserId"
+                               type="hidden" />
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
+
+                            <label class="form-label fw-semibold">
                                 User
                             </label>
 
                             <input value="@Model.FullName"
                                    class="form-control"
                                    disabled />
+
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
+
+                            <label class="form-label fw-semibold">
                                 Email
                             </label>
 
                             <input value="@Model.Email"
                                    class="form-control"
                                    disabled />
+
                         </div>
 
                         <div class="mb-4">
+
                             <label asp-for="Role"
-                                   class="form-label">
+                                   class="form-label fw-semibold">
+                                Role
                             </label>
 
                             <select asp-for="Role"
                                     class="form-select">
+
                                 <option value="User">
                                     User
                                 </option>
@@ -64,11 +76,18 @@
                                 <option value="Admin">
                                     Admin
                                 </option>
+
                             </select>
 
                             <span asp-validation-for="Role"
                                   class="text-danger">
                             </span>
+
+                        </div>
+
+                        <div class="alert alert-light border">
+                            Admin users have access to the administration area
+                            and user role management.
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -91,8 +110,11 @@
 
                 </div>
             </div>
+
         </div>
+
     </div>
+
 </div>
 
 @section Scripts {
