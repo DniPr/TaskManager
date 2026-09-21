@@ -43,6 +43,8 @@ namespace TaskManager.Services
                                   + " "
                                   + t.AssignedUser.LastName,
 
+                            CanModify = t.Project.OwnerId == userId ||
+                                        t.CreatedByUserId == userId
                         })
                         .OrderBy(t => t.Status)
                         .ThenByDescending(t => t.Priority)
@@ -297,6 +299,41 @@ namespace TaskManager.Services
             return members
                 .OrderBy(m => m.FullName)
                 .ToList();
+        }
+        public async Task<bool> UpdateStatusAsync(int taskId,TaskItemStatus status,string userId)
+        {
+            TaskItem? task = await dbContext.TaskItems
+                .Include(t => t.Project)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
+
+            if (task == null)
+            {
+                return false;
+            }
+
+            bool canModify =
+                task.Project.OwnerId == userId ||
+                task.CreatedByUserId == userId;
+
+            if (!canModify)
+            {
+                return false;
+            }
+
+            task.Status = status;
+
+            if (status == TaskItemStatus.Completed)
+            {
+                task.CompletedOn = DateTime.UtcNow;
+            }
+            else
+            {
+                task.CompletedOn = null;
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TaskManager.ViewModels.TaskViewModels;
+﻿using TaskManager.Models.Enums;
+using TaskManager.ViewModels.TaskViewModels;
 
 namespace TaskManager.Services.Interfaces
 {
@@ -17,5 +18,7 @@ namespace TaskManager.Services.Interfaces
         Task<bool> DeleteAsync(int id,string userId);
 
         Task<IEnumerable<TaskAssigneeViewModel>> GetProjectAssigneesAsync(int projectId,string userId);
+
+        Task<bool> UpdateStatusAsync(int taskId,TaskItemStatus status,string userId);
     }
 }

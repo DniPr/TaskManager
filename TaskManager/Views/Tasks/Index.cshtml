@@ -67,15 +67,26 @@
 
             @foreach (var task in Model.Tasks)
             {
+
+                    string statusClass = task.Status switch
+                    {
+                        TaskManager.Models.Enums.TaskItemStatus.ToDo => "task-todo",
+                        TaskManager.Models.Enums.TaskItemStatus.InProgress => "task-inprogress",
+                        TaskManager.Models.Enums.TaskItemStatus.Completed => "task-completed",
+                        _ => ""
+                    };
+
                 <div class="col-md-6 col-xl-4">
 
-                    <div class="card shadow-sm h-100 task-card">
+                    <div class="card shadow-sm h-100 task-card @statusClass"
+                         id="task-card-@task.Id">
 
                         <div class="card-body d-flex flex-column p-4">
 
                             <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
 
-                                <h4 class="card-title mb-0">
+                                <h4 class="card-title mb-0 task-title @(task.Status == TaskManager.Models.Enums.TaskItemStatus.Completed ? "task-title-completed" : "")"
+                                    id="task-title-@task.Id">
                                     @task.Title
                                 </h4>
 
@@ -114,27 +125,53 @@
                                     Status
                                 </span>
 
-                                @switch (task.Status)
+                                @if (task.CanModify)
                                 {
-                                    case TaskManager.Models.Enums.TaskItemStatus.ToDo:
-                                        <span class="badge bg-secondary">
+                                    <select class="form-select form-select-sm task-status-select"
+                                            data-task-id="@task.Id">
+
+                                        <option value="1"
+                                                selected="@(task.Status == TaskManager.Models.Enums.TaskItemStatus.ToDo)">
                                             To Do
-                                        </span>
-                                        break;
+                                        </option>
 
-                                    case TaskManager.Models.Enums.TaskItemStatus.InProgress:
-                                        <span class="badge bg-warning text-dark">
+                                        <option value="2"
+                                                selected="@(task.Status == TaskManager.Models.Enums.TaskItemStatus.InProgress)">
                                             In Progress
-                                        </span>
-                                        break;
+                                        </option>
 
-                                    case TaskManager.Models.Enums.TaskItemStatus.Completed:
-                                        <span class="badge bg-success">
+                                        <option value="3"
+                                                selected="@(task.Status == TaskManager.Models.Enums.TaskItemStatus.Completed)">
                                             Completed
-                                        </span>
-                                        break;
-                                }
+                                        </option>
 
+                                    </select>
+                                    <small class="task-status-message mt-1 d-block"></small>
+                                    <span class="task-status-badge d-none"></span>
+                                }
+                                else
+                                {
+                                    @switch (task.Status)
+                                    {
+                                        case TaskManager.Models.Enums.TaskItemStatus.ToDo:
+                                            <span class="badge bg-secondary">
+                                                To Do
+                                            </span>
+                                            break;
+
+                                        case TaskManager.Models.Enums.TaskItemStatus.InProgress:
+                                            <span class="badge bg-warning text-dark">
+                                                In Progress
+                                            </span>
+                                            break;
+
+                                        case TaskManager.Models.Enums.TaskItemStatus.Completed:
+                                            <span class="badge bg-success">
+                                                Completed
+                                            </span>
+                                            break;
+                                    }
+                                }
                         </div>
 
                         <div class="mb-3">
@@ -191,3 +228,7 @@
     }
 
 </div>
+
+@section Scripts {
+    <script src="~/js/tasks.js"></script>
+}

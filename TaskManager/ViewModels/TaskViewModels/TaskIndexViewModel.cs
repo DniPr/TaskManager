@@ -15,5 +15,7 @@ namespace TaskManager.ViewModels.TaskViewModels
         public DateTime? Deadline { get; set; }
 
         public string? AssignedUserName { get; set; }
+
+        public bool CanModify { get; set; }
     }
 }

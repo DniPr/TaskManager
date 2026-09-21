@@ -211,3 +211,30 @@ h5 {
 .admin-card .card-body {
     min-height: 220px;
 }
+
+.task-status-message {
+    min-height: 20px;
+    font-size: 0.85rem;
+}
+
+.task-card {
+    border-left: 5px solid transparent;
+}
+
+.task-todo {
+    border-left-color: #6c757d;
+}
+
+
+.task-inprogress {
+    border-left-color: #ffc107;
+}
+
+.task-completed {
+    border-left-color: #198754;
+}
+
+.task-title-completed {
+    text-decoration: line-through;
+    opacity: 0.65;
+}
