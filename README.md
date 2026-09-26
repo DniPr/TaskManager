@@ -374,34 +374,6 @@ Or start the application directly from Visual Studio.
 
 ---
 
-## Screenshots
-
-### Dashboard
-
-_Add dashboard screenshot here._
-
-### Projects
-
-_Add projects screenshot here._
-
-### Project Details
-
-_Add project details screenshot here._
-
-### Tasks
-
-_Add tasks screenshot here._
-
-### Admin Dashboard
-
-_Add admin dashboard screenshot here._
-
-### User Role Management
-
-_Add role management screenshot here._
-
----
-
 ## Highlights
 
 This project demonstrates practical usage of:
